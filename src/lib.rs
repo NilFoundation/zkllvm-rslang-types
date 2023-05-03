@@ -51,6 +51,12 @@ impl DivAssign for PallasBase {
     }
 }
 
+impl From<__zkllvm_field_pallas_base> for PallasBase {
+    fn from(value: __zkllvm_field_pallas_base) -> Self {
+        Self(value)
+    }
+}
+
 impl Mul for PallasBase {
     type Output = Self;
 
