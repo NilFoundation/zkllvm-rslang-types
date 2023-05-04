@@ -114,3 +114,6 @@ mod num_traits;
 
 #[cfg(feature = "iter")]
 mod iter;
+
+#[cfg(feature = "zeroize")]
+mod zeroize;
