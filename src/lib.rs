@@ -3,7 +3,31 @@
 #![feature(restricted_std)]
 
 use std::fmt;
-use std::ops::{Add, Sub, Neg, Div, Mul, AddAssign, SubAssign, MulAssign, DivAssign};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign};
+
+/// Bls12381 base field type.
+///
+/// Wrapper for `__zkllvm_field_bls12381_base` type.
+#[derive(Clone, Copy, Default, Eq, PartialEq)]
+pub struct Bls12381Base(pub __zkllvm_field_bls12381_base);
+
+/// Bls12381 scalar field type.
+///
+/// Wrapper for `__zkllvm_field_bls12381_scalar` type.
+#[derive(Clone, Copy, Default, Eq, PartialEq)]
+pub struct Bls12381Scalar(pub __zkllvm_field_bls12381_scalar);
+
+/// Curve25519 base field type.
+///
+/// Wrapper for `__zkllvm_field_curve25519_base` type.
+#[derive(Clone, Copy, Default, Eq, PartialEq)]
+pub struct Curve25519Base(pub __zkllvm_field_curve25519_base);
+
+/// Curve25519 scalar field type.
+///
+/// Wrapper for `__zkllvm_field_curve25519_scalar` type.
+#[derive(Clone, Copy, Default, Eq, PartialEq)]
+pub struct Curve25519Scalar(pub __zkllvm_field_curve25519_scalar);
 
 /// Pallas base field type.
 ///
@@ -11,84 +35,67 @@ use std::ops::{Add, Sub, Neg, Div, Mul, AddAssign, SubAssign, MulAssign, DivAssi
 #[derive(Clone, Copy, Default, Eq, PartialEq)]
 pub struct PallasBase(pub __zkllvm_field_pallas_base);
 
-impl Add for PallasBase {
-    type Output = Self;
+/// Pallas scalar field type.
+///
+/// Wrapper for `__zkllvm_field_pallas_scalar` type.
+#[derive(Clone, Copy, Default, Eq, PartialEq)]
+pub struct PallasScalar(pub __zkllvm_field_pallas_scalar);
 
-    fn add(self, other: Self) -> Self::Output {
-        Self(self.0.add(other.0))
-    }
+#[macro_use]
+mod arith_macros;
+
+arith_impls!(
+    Bls12381Base
+    Bls12381Scalar
+    Curve25519Base
+    Curve25519Scalar
+    PallasBase
+    PallasScalar
+);
+
+/// Implements `fmt::Debug` and `fmt::Display`,
+/// assuming that `T.0` is `fmt::Debug` and `fmt::Display`.
+macro_rules! fmt_impls {
+    ($($t:ty)*) => ($(
+        impl fmt::Debug for $t {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                self.0.fmt(f)
+            }
+        }
+
+        impl fmt::Display for $t {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                self.0.fmt(f)
+            }
+        }
+    )*)
 }
 
-impl AddAssign for PallasBase {
-    fn add_assign(&mut self, rhs: Self) {
-        self.0.add_assign(rhs.0);
-    }
+fmt_impls!(
+    Bls12381Base
+    Bls12381Scalar
+    Curve25519Base
+    Curve25519Scalar
+    PallasBase
+    PallasScalar
+);
+
+/// Implements `From<T>`, assuming that `Self.0` is `T`.
+macro_rules! from_impls {
+    ($($t:ty, $builtin:ident)*) => ($(
+        impl From<$builtin> for $t {
+            fn from(value: $builtin) -> Self {
+                Self(value)
+            }
+        }
+    )*)
 }
 
-impl fmt::Debug for PallasBase {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.0.fmt(f)
-    }
-}
-
-impl fmt::Display for PallasBase {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.0.fmt(f)
-    }
-}
-
-impl Div for PallasBase {
-    type Output = Self;
-
-    fn div(self, other: Self) -> Self::Output {
-        Self(self.0.div(other.0))
-    }
-}
-
-impl DivAssign for PallasBase {
-    fn div_assign(&mut self, other: Self) {
-        self.0.div_assign(other.0);
-    }
-}
-
-impl From<__zkllvm_field_pallas_base> for PallasBase {
-    fn from(value: __zkllvm_field_pallas_base) -> Self {
-        Self(value)
-    }
-}
-
-impl Mul for PallasBase {
-    type Output = Self;
-
-    fn mul(self, other: Self) -> Self {
-        Self(self.0.mul(other.0))
-    }
-}
-
-impl MulAssign for PallasBase {
-    fn mul_assign(&mut self, other: Self) {
-        self.0.mul_assign(other.0);
-    }
-}
-
-impl Neg for PallasBase {
-    type Output = Self;
-
-    fn neg(self) -> Self::Output {
-        Self(self.0.neg())
-    }
-}
-
-impl Sub for PallasBase {
-    type Output = Self;
-
-    fn sub(self, other: Self) -> Self::Output {
-        Self(self.0.sub(other.0))
-    }
-}
-
-impl SubAssign for PallasBase {
-    fn sub_assign(&mut self, other: Self) {
-        self.0.sub_assign(other.0);
-    }
-}
+from_impls!(
+    Bls12381Base, __zkllvm_field_bls12381_base
+    Bls12381Scalar, __zkllvm_field_bls12381_scalar
+    Curve25519Base, __zkllvm_field_curve25519_base
+    Curve25519Scalar, __zkllvm_field_curve25519_scalar
+    PallasBase, __zkllvm_field_pallas_base
+    PallasScalar, __zkllvm_field_pallas_scalar 
+);
