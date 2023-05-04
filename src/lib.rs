@@ -81,7 +81,7 @@ fmt_impls!(
 );
 
 /// Implements `From<T>`, assuming that `Self.0` is `T`.
-macro_rules! from_impls {
+macro_rules! from_impl {
     ($($t:ty, $builtin:ident)*) => ($(
         impl From<$builtin> for $t {
             fn from(value: $builtin) -> Self {
@@ -91,7 +91,7 @@ macro_rules! from_impls {
     )*)
 }
 
-from_impls!(
+from_impl!(
     Bls12381Base, __zkllvm_field_bls12381_base
     Bls12381Scalar, __zkllvm_field_bls12381_scalar
     Curve25519Base, __zkllvm_field_curve25519_base
@@ -99,3 +99,6 @@ from_impls!(
     PallasBase, __zkllvm_field_pallas_base
     PallasScalar, __zkllvm_field_pallas_scalar 
 );
+
+#[cfg(feature = "hash")]
+mod hash;
