@@ -105,3 +105,6 @@ mod hash;
 
 #[cfg(feature = "ord")]
 mod ord;
+
+#[cfg(feature = "int-conversions")]
+mod int_conversions;
