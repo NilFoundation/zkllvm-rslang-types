@@ -6,3 +6,4 @@ edition = "2021"
 [features]
 default = []
 hash = []
+ord = []

@@ -102,3 +102,6 @@ from_impl!(
 
 #[cfg(feature = "hash")]
 mod hash;
+
+#[cfg(feature = "ord")]
+mod ord;
