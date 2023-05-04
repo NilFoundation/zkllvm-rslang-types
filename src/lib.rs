@@ -117,3 +117,8 @@ mod iter;
 
 #[cfg(feature = "zeroize")]
 mod zeroize;
+
+#[cfg(feature = "arkworks")]
+mod arkworks;
+#[cfg(feature = "arkworks")]
+pub use arkworks::{PallasBaseConfig, PallasScalarConfig};
