@@ -108,3 +108,6 @@ mod ord;
 
 #[cfg(feature = "int-conversions")]
 mod int_conversions;
+
+#[cfg(feature = "num-traits")]
+mod num_traits;
