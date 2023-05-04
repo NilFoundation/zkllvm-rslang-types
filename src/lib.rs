@@ -111,3 +111,6 @@ mod int_conversions;
 
 #[cfg(feature = "num-traits")]
 mod num_traits;
+
+#[cfg(feature = "iter")]
+mod iter;
