@@ -1,4 +1,8 @@
 //! Implementations of some of [`num-traits`](https://docs.rs/num-traits/) traits.
+//!
+//! Currently implemented:
+//! * [`Zero`]
+//! * [`One`]
 
 use num_traits::{One, Zero};
 
