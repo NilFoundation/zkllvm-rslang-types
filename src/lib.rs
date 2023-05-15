@@ -1,7 +1,5 @@
 //! zkLLVM type wrappers.
 
-#![feature(restricted_std)]
-
 use std::fmt;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign};
 

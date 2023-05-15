@@ -1,4 +1,3 @@
-#![cfg_attr(target_arch = "assigner", feature(restricted_std))]
 #![no_main]
 
 extern crate zktypes;
