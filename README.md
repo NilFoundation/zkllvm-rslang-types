@@ -1,6 +1,6 @@
-# zktypes
+# zkllvm-rslang-types
 
-This library defines zkLLVM type wrappers with implemented external traits.
+This library defines zkLLVM field type wrappers with implemented external traits.
 
 This library is supposed to be built **only** with [`rslang`](https://github.com/NilFoundation/zkllvm-rslang) compiler (fork of Rust compiler). Visit [zkLLVM](https://github.com/NilFoundation/zkllvm) repository to get installation instructions.
 
@@ -16,16 +16,16 @@ Arithmetic and formatting traits are implemented by default.
 
 ## Usage
 
-To add `zktypes` to your dependencies, add this to your `Cargo.toml`:
+To add `zkllvm-rslang-types` to your dependencies, add this to your `Cargo.toml`:
 
 ```
-zktypes = { git = "https://github.com/NilFoundation/zkllvm-rslang-types.git", branch = "master" }
+zkllvm-rslang-types = { git = "https://github.com/NilFoundation/zkllvm-rslang-types.git", branch = "master" }
 ```
 
 If you want to add e.g. implementations of integer conversions, add this:
 
 ```
-zktypes = { git = "https://github.com/NilFoundation/zkllvm-rslang-types.git", branch = "master", features = [ "int-conversions" ]}
+zkllvm-rslang-types = { git = "https://github.com/NilFoundation/zkllvm-rslang-types.git", branch = "master", features = [ "int-conversions" ]}
 ```
 
 ## Example
