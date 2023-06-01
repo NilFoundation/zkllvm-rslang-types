@@ -1,7 +1,15 @@
 [package]
 name = "zkllvm-rslang-types"
-version = "0.1.0"
+version = "0.1.0-beta.0"
+authors = ["=nil; Foundation"]
 edition = "2021"
+description = "zkLLVM field type wrappers"
+readme = "README.md"
+homepage = "https://github.com/NilFoundation/zkllvm-rslang"
+repository = "https://github.com/NilFoundation/zkllvm-rslang"
+license = "MIT OR Apache-2.0"
+keywords = ["zkllvm"]
+publish = false
 
 [dependencies]
 num-traits = { version = "0.2.15", optional = true }
