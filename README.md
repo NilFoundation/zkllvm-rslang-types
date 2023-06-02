@@ -1,4 +1,6 @@
-# zkllvm-rslang-types
+# zkllvm-rslang-types-pre
+
+**Warning: This is a temporary pre-release version, created only to test uploading to [crates.io](crates.io).**
 
 This library defines zkLLVM field type wrappers with implemented external traits.
 
@@ -16,16 +18,16 @@ Arithmetic and formatting traits are implemented by default.
 
 ## Usage
 
-To add `zkllvm-rslang-types` to your dependencies, add this to your `Cargo.toml`:
+To add `zkllvm-rslang-types-pre` to your dependencies, add this to your `Cargo.toml`:
 
 ```
-zkllvm-rslang-types = { git = "https://github.com/NilFoundation/zkllvm-rslang-types.git", branch = "master" }
+zkllvm-rslang-types-pre = { git = "https://github.com/NilFoundation/zkllvm-rslang-types-pre.git", branch = "master" }
 ```
 
 If you want to add e.g. implementations of integer conversions, add this:
 
 ```
-zkllvm-rslang-types = { git = "https://github.com/NilFoundation/zkllvm-rslang-types.git", branch = "master", features = [ "int-conversions" ]}
+zkllvm-rslang-types-pre = { git = "https://github.com/NilFoundation/zkllvm-rslang-types-pre.git", branch = "master", features = [ "int-conversions" ]}
 ```
 
 ## Example

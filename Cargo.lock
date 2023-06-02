@@ -289,7 +289,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "zkllvm-rslang-types"
+name = "zkllvm-rslang-types-pre"
 version = "0.1.0-beta.0"
 dependencies = [
  "ark-ff",

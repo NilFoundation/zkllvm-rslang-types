@@ -1,8 +1,8 @@
 #![no_main]
 
-extern crate zkllvm_rslang_types;
+extern crate zkllvm_rslang_types_pre;
 
-use zkllvm_rslang_types::PallasBase;
+use zkllvm_rslang_types_pre::PallasBase;
 
 fn pow(a: PallasBase, n: u32) -> PallasBase {
     if n == 0 {
