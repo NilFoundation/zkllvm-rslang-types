@@ -5,8 +5,8 @@ authors = ["=nil; Foundation"]
 edition = "2021"
 description = "zkLLVM field type wrappers"
 readme = "README.md"
-homepage = "https://github.com/NilFoundation/zkllvm-rslang"
-repository = "https://github.com/NilFoundation/zkllvm-rslang"
+homepage = "https://github.com/NilFoundation/zkllvm-rslang-types"
+repository = "https://github.com/NilFoundation/zkllvm-rslang-types"
 license = "MIT OR Apache-2.0"
 keywords = ["zkllvm"]
 publish = false
