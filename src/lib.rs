@@ -95,7 +95,7 @@ from_impl!(
     Curve25519Base, __zkllvm_field_curve25519_base
     Curve25519Scalar, __zkllvm_field_curve25519_scalar
     PallasBase, __zkllvm_field_pallas_base
-    PallasScalar, __zkllvm_field_pallas_scalar 
+    PallasScalar, __zkllvm_field_pallas_scalar
 );
 
 /// Implements `From<T>`, assuming that `T.0` is `Self`.
@@ -115,7 +115,7 @@ from_impl_backwards!(
     Curve25519Base, __zkllvm_field_curve25519_base
     Curve25519Scalar, __zkllvm_field_curve25519_scalar
     PallasBase, __zkllvm_field_pallas_base
-    PallasScalar, __zkllvm_field_pallas_scalar 
+    PallasScalar, __zkllvm_field_pallas_scalar
 );
 
 #[cfg(feature = "hash")]
