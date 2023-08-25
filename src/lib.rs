@@ -98,6 +98,26 @@ from_impl!(
     PallasScalar, __zkllvm_field_pallas_scalar 
 );
 
+/// Implements `From<T>`, assuming that `T.0` is `Self`.
+macro_rules! from_impl_backwards {
+    ($($t:ty, $builtin:ident)*) => ($(
+        impl From<$t> for $builtin {
+            fn from(value: $t) -> Self {
+                value.0
+            }
+        }
+    )*)
+}
+
+from_impl_backwards!(
+    Bls12381Base, __zkllvm_field_bls12381_base
+    Bls12381Scalar, __zkllvm_field_bls12381_scalar
+    Curve25519Base, __zkllvm_field_curve25519_base
+    Curve25519Scalar, __zkllvm_field_curve25519_scalar
+    PallasBase, __zkllvm_field_pallas_base
+    PallasScalar, __zkllvm_field_pallas_scalar 
+);
+
 #[cfg(feature = "hash")]
 mod hash;
 
