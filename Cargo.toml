@@ -20,10 +20,9 @@ ark-serialize = { version = "0.4.2", default-features = false, optional = true }
 [features]
 default = []
 hash = []
-ord = []
 int-conversions = []
 num-traits = ["dep:num-traits"]
 iter = []
 zeroize = ["dep:zeroize"]
 arkworks = ["dep:ark-std", "dep:ark-ff", "dep:ark-serialize",
-            "hash", "ord", "int-conversions", "num-traits", "iter", "zeroize"]
+            "hash", "int-conversions", "num-traits", "iter", "zeroize"]

@@ -6,61 +6,61 @@ use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssi
 /// Bls12381 curve type.
 ///
 /// Wrapper for `__zkllvm_curve_bls12381` type.
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, PartialOrd, Ord)]
 pub struct Bls12381(pub __zkllvm_curve_bls12381);
 
 /// Bls12381 base field type.
 ///
 /// Wrapper for `__zkllvm_field_bls12381_base` type.
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, PartialOrd, Ord)]
 pub struct Bls12381Base(pub __zkllvm_field_bls12381_base);
 
 /// Bls12381 scalar field type.
 ///
 /// Wrapper for `__zkllvm_field_bls12381_scalar` type.
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, PartialOrd, Ord)]
 pub struct Bls12381Scalar(pub __zkllvm_field_bls12381_scalar);
 
 /// Curve25519 curve type.
 ///
 /// Wrapper for `__zkllvm_curve_curve25519` type.
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, PartialOrd, Ord)]
 pub struct Curve25519(pub __zkllvm_curve_curve25519);
 
 /// Curve25519 base field type.
 ///
 /// Wrapper for `__zkllvm_field_curve25519_base` type.
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, PartialOrd, Ord)]
 pub struct Curve25519Base(pub __zkllvm_field_curve25519_base);
 
 /// Curve25519 scalar field type.
 ///
 /// Wrapper for `__zkllvm_field_curve25519_scalar` type.
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, PartialOrd, Ord)]
 pub struct Curve25519Scalar(pub __zkllvm_field_curve25519_scalar);
 
 /// Pallas curve type.
 ///
 /// Wrapper for `__zkllvm_curve_pallas` type.
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, PartialOrd, Ord)]
 pub struct Pallas(pub __zkllvm_curve_pallas);
 
 /// Pallas base field type.
 ///
 /// Wrapper for `__zkllvm_field_pallas_base` type.
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, PartialOrd, Ord)]
 pub struct PallasBase(pub __zkllvm_field_pallas_base);
 
 /// Pallas scalar field type.
 ///
 /// Wrapper for `__zkllvm_field_pallas_scalar` type.
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, PartialOrd, Ord)]
 pub struct PallasScalar(pub __zkllvm_field_pallas_scalar);
 
 /// Vesta curve type.
 ///
 /// Wrapper for `__zkllvm_curve_vesta` type.
-#[derive(Clone, Copy, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Default, Eq, PartialEq, PartialOrd, Ord)]
 pub struct Vesta(pub __zkllvm_curve_vesta);
 
 /// Vesta base field type.
@@ -187,9 +187,6 @@ curve_inits!(
 
 #[cfg(feature = "hash")]
 mod hash;
-
-#[cfg(feature = "ord")]
-mod ord;
 
 #[cfg(feature = "int-conversions")]
 mod int_conversions;
