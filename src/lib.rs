@@ -154,6 +154,37 @@ from_impl!(
     Vesta, __zkllvm_curve_vesta
 );
 
+macro_rules! curve_inits {
+    ($($curve:ty, $builtin:ty, $base:ty)*) => ($(
+        impl $curve {
+            /// Create curve element from base field coordinates.
+            #[inline(always)]
+            pub unsafe fn from_coordinates(x: $base, y: $base) -> Self {
+                Self(<$builtin>::from_coordinates(x.0, y.0))
+            }
+
+            /// Create neutral curve element.
+            #[inline(always)]
+            pub fn zero() -> Self {
+                Self(<$builtin>::zero())
+            }
+
+            /// Create generator (`one`) curve element.
+            #[inline(always)]
+            pub fn one() -> Self {
+                Self(<$builtin>::one())
+            }
+        }
+    )*)
+}
+
+curve_inits!(
+    Bls12381, __zkllvm_curve_bls12381, Bls12381Base
+    Curve25519, __zkllvm_curve_curve25519, Curve25519Base
+    Pallas, __zkllvm_curve_pallas, PallasBase
+    Vesta, __zkllvm_curve_vesta, VestaBase
+);
+
 #[cfg(feature = "hash")]
 mod hash;
 
