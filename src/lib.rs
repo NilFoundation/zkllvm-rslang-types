@@ -3,6 +3,12 @@
 use std::fmt;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign};
 
+/// Bls12381 curve type.
+///
+/// Wrapper for `__zkllvm_curve_bls12381` type.
+#[derive(Clone, Copy, Default, Eq, PartialEq)]
+pub struct Bls12381(pub __zkllvm_curve_bls12381);
+
 /// Bls12381 base field type.
 ///
 /// Wrapper for `__zkllvm_field_bls12381_base` type.
@@ -14,6 +20,12 @@ pub struct Bls12381Base(pub __zkllvm_field_bls12381_base);
 /// Wrapper for `__zkllvm_field_bls12381_scalar` type.
 #[derive(Clone, Copy, Default, Eq, PartialEq)]
 pub struct Bls12381Scalar(pub __zkllvm_field_bls12381_scalar);
+
+/// Curve25519 curve type.
+///
+/// Wrapper for `__zkllvm_curve_curve25519` type.
+#[derive(Clone, Copy, Default, Eq, PartialEq)]
+pub struct Curve25519(pub __zkllvm_curve_curve25519);
 
 /// Curve25519 base field type.
 ///
@@ -27,6 +39,12 @@ pub struct Curve25519Base(pub __zkllvm_field_curve25519_base);
 #[derive(Clone, Copy, Default, Eq, PartialEq)]
 pub struct Curve25519Scalar(pub __zkllvm_field_curve25519_scalar);
 
+/// Pallas curve type.
+///
+/// Wrapper for `__zkllvm_curve_pallas` type.
+#[derive(Clone, Copy, Default, Eq, PartialEq)]
+pub struct Pallas(pub __zkllvm_curve_pallas);
+
 /// Pallas base field type.
 ///
 /// Wrapper for `__zkllvm_field_pallas_base` type.
@@ -39,6 +57,22 @@ pub struct PallasBase(pub __zkllvm_field_pallas_base);
 #[derive(Clone, Copy, Default, Eq, PartialEq)]
 pub struct PallasScalar(pub __zkllvm_field_pallas_scalar);
 
+/// Vesta curve type.
+///
+/// Wrapper for `__zkllvm_curve_vesta` type.
+#[derive(Clone, Copy, Default, Eq, PartialEq)]
+pub struct Vesta(pub __zkllvm_curve_vesta);
+
+/// Vesta base field type.
+///
+/// Alias for `PallasScalar` type.
+pub type VestaBase = PallasScalar;
+
+/// Vesta scalar field type.
+///
+/// Alias for `PallasBase` type.
+pub type VestaScalar = PallasBase;
+
 #[macro_use]
 mod arith_macros;
 
@@ -49,6 +83,13 @@ arith_impls!(
     Curve25519Scalar
     PallasBase
     PallasScalar
+);
+
+curve_arith_impls!(
+    Bls12381, Bls12381Scalar
+    Curve25519, Curve25519Scalar
+    Pallas, PallasScalar
+    Vesta, VestaScalar
 );
 
 /// Implements `fmt::Debug` and `fmt::Display`,
@@ -70,38 +111,29 @@ macro_rules! fmt_impls {
 }
 
 fmt_impls!(
+    Bls12381
     Bls12381Base
     Bls12381Scalar
+    Curve25519
     Curve25519Base
     Curve25519Scalar
+    Pallas
     PallasBase
     PallasScalar
+    Vesta
 );
 
-/// Implements `From<T>`, assuming that `Self.0` is `T`.
 macro_rules! from_impl {
     ($($t:ty, $builtin:ident)*) => ($(
         impl From<$builtin> for $t {
+            #[inline(always)]
             fn from(value: $builtin) -> Self {
                 Self(value)
             }
         }
-    )*)
-}
 
-from_impl!(
-    Bls12381Base, __zkllvm_field_bls12381_base
-    Bls12381Scalar, __zkllvm_field_bls12381_scalar
-    Curve25519Base, __zkllvm_field_curve25519_base
-    Curve25519Scalar, __zkllvm_field_curve25519_scalar
-    PallasBase, __zkllvm_field_pallas_base
-    PallasScalar, __zkllvm_field_pallas_scalar
-);
-
-/// Implements `From<T>`, assuming that `T.0` is `Self`.
-macro_rules! from_impl_backwards {
-    ($($t:ty, $builtin:ident)*) => ($(
         impl From<$t> for $builtin {
+            #[inline(always)]
             fn from(value: $t) -> Self {
                 value.0
             }
@@ -109,13 +141,17 @@ macro_rules! from_impl_backwards {
     )*)
 }
 
-from_impl_backwards!(
+from_impl!(
+    Bls12381, __zkllvm_curve_bls12381
     Bls12381Base, __zkllvm_field_bls12381_base
     Bls12381Scalar, __zkllvm_field_bls12381_scalar
+    Curve25519, __zkllvm_curve_curve25519
     Curve25519Base, __zkllvm_field_curve25519_base
     Curve25519Scalar, __zkllvm_field_curve25519_scalar
+    Pallas, __zkllvm_curve_pallas
     PallasBase, __zkllvm_field_pallas_base
     PallasScalar, __zkllvm_field_pallas_scalar
+    Vesta, __zkllvm_curve_vesta
 );
 
 #[cfg(feature = "hash")]

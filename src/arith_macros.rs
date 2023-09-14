@@ -118,6 +118,34 @@ macro_rules! mul_impl {
     )*)
 }
 
+/// Implements `Mul` for curve types.
+/// Then calls [`forward_ref_binop`] for `*` operation.
+macro_rules! mul_curve_impl {
+    ($($curve:ty, $scalar:ty)*) => ($(
+        impl Mul<$scalar> for $curve {
+            type Output = $curve;
+
+            #[inline]
+            fn mul(self, other: $scalar) -> $curve {
+                Self(self.0.mul(other.0))
+            }
+        }
+
+        forward_ref_binop! { impl Mul, mul for $curve, $scalar }
+
+        impl Mul<$curve> for $scalar {
+            type Output = $curve;
+
+            #[inline]
+            fn mul(self, other: $curve) -> $curve {
+                self.0.mul(other.0).into()
+            }
+        }
+
+        forward_ref_binop! { impl Mul, mul for $scalar, $curve }
+    )*)
+}
+
 /// Implements `Div`, assuming that `T.0` and `U.0` are `Div`.
 /// Then calls [`forward_ref_binop`] for `/` operation.
 macro_rules! div_impl {
@@ -132,6 +160,23 @@ macro_rules! div_impl {
         }
 
         forward_ref_binop! { impl Div, div for $t, $t }
+    )*)
+}
+
+/// Implements `Div` for curve types.
+/// Then calls [`forward_ref_binop`] for `/` operation.
+macro_rules! div_curve_impl {
+    ($($curve:ty, $scalar:ty)*) => ($(
+        impl Div<$scalar> for $curve {
+            type Output = $curve;
+
+            #[inline]
+            fn div(self, other: $scalar) -> $curve {
+                Self(self.0.div(other.0))
+            }
+        }
+
+        forward_ref_binop! { impl Div, div for $curve, $scalar }
     )*)
 }
 
@@ -214,6 +259,21 @@ macro_rules! mul_assign_impl {
     )+)
 }
 
+/// Implements `MulAssign` for curves.
+/// Then calls [`forward_ref_op_assign`] for `*=` operation.
+macro_rules! mul_assign_curve_impl {
+    ($($curve:ty, $scalar:ty)+) => ($(
+        impl MulAssign<$scalar> for $curve {
+            #[inline]
+            fn mul_assign(&mut self, other: $scalar) {
+                self.0.mul_assign(other.0);
+            }
+        }
+
+        forward_ref_op_assign! { impl MulAssign, mul_assign for $curve, $scalar }
+    )+)
+}
+
 /// Implements `DivAssign`, assuming that `T.0` and `U.0` are `DivAssign`.
 /// Then calls [`forward_ref_op_assign`] for `/=` operation.
 macro_rules! div_assign_impl {
@@ -226,6 +286,21 @@ macro_rules! div_assign_impl {
         }
 
         forward_ref_op_assign! { impl DivAssign, div_assign for $t, $t }
+    )+)
+}
+
+/// Implements `DivAssign` for curves.
+/// Then calls [`forward_ref_op_assign`] for `/=` operation.
+macro_rules! div_assign_curve_impl {
+    ($($curve:ty, $scalar:ty)+) => ($(
+        impl DivAssign<$scalar> for $curve {
+            #[inline]
+            fn div_assign(&mut self, other: $scalar) {
+                self.0.div_assign(other.0);
+            }
+        }
+
+        forward_ref_op_assign! { impl DivAssign, div_assign for $curve, $scalar }
     )+)
 }
 
@@ -244,7 +319,7 @@ macro_rules! rem_assign_impl {
     )+)
 }
 
-/// All arithmetic impls for given type.
+/// All arithmetic impls for given field type.
 macro_rules! arith_impls {
     ($($t:ty)*) => ($(
         add_impl! { $t }
@@ -258,5 +333,20 @@ macro_rules! arith_impls {
         mul_assign_impl! { $t }
         div_assign_impl! { $t }
         rem_assign_impl! { $t }
+    )*)
+}
+
+/// All arithmetic impls for given curve and corresponding scalar field types.
+macro_rules! curve_arith_impls {
+    ($($curve:ty, $scalar:ty)*) => ($(
+        add_impl! { $curve }
+        sub_impl! { $curve }
+        neg_impl! { $curve }
+        mul_curve_impl! { $curve, $scalar }
+        div_curve_impl! { $curve, $scalar }
+        add_assign_impl! { $curve }
+        sub_assign_impl! { $curve }
+        mul_assign_curve_impl! { $curve, $scalar }
+        div_assign_curve_impl! { $curve, $scalar }
     )*)
 }
