@@ -320,7 +320,7 @@ macro_rules! rem_assign_impl {
 }
 
 /// All arithmetic impls for given field type.
-macro_rules! arith_impls {
+macro_rules! arith_impl {
     ($($t:ty)*) => ($(
         add_impl! { $t }
         sub_impl! { $t }
@@ -337,7 +337,7 @@ macro_rules! arith_impls {
 }
 
 /// All arithmetic impls for given curve and corresponding scalar field types.
-macro_rules! curve_arith_impls {
+macro_rules! curve_arith_impl {
     ($($curve:ty, $scalar:ty)*) => ($(
         add_impl! { $curve }
         sub_impl! { $curve }

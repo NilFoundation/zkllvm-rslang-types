@@ -1,7 +1,10 @@
 //! zkLLVM type wrappers.
 
 use std::fmt;
-use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign};
+use std::ops::{
+    Add, AddAssign, Deref, DerefMut, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub,
+    SubAssign,
+};
 
 /// Bls12381 curve type.
 ///
@@ -73,28 +76,41 @@ pub type VestaBase = PallasScalar;
 /// Alias for `PallasBase` type.
 pub type VestaScalar = PallasBase;
 
-#[macro_use]
-mod arith_macros;
+/// Implements `Deref` and `DerefMut` on `T`.
+macro_rules! deref_impl {
+    ($($t:ty, $builtin:ident)*) => ($(
+        impl Deref for $t {
+            type Target = $builtin;
 
-arith_impls!(
-    Bls12381Base
-    Bls12381Scalar
-    Curve25519Base
-    Curve25519Scalar
-    PallasBase
-    PallasScalar
-);
+            fn deref(&self) -> &Self::Target {
+                &self.0
+            }
+        }
 
-curve_arith_impls!(
-    Bls12381, Bls12381Scalar
-    Curve25519, Curve25519Scalar
-    Pallas, PallasScalar
-    Vesta, VestaScalar
-);
+        impl DerefMut for $t {
+            fn deref_mut(&mut self) -> &mut Self::Target {
+                &mut self.0
+            }
+        }
+    )*)
+}
+
+deref_impl! {
+    Bls12381, __zkllvm_curve_bls12381
+    Bls12381Base, __zkllvm_field_bls12381_base
+    Bls12381Scalar, __zkllvm_field_bls12381_scalar
+    Curve25519, __zkllvm_curve_curve25519
+    Curve25519Base, __zkllvm_field_curve25519_base
+    Curve25519Scalar, __zkllvm_field_curve25519_scalar
+    Pallas, __zkllvm_curve_pallas
+    PallasBase, __zkllvm_field_pallas_base
+    PallasScalar, __zkllvm_field_pallas_scalar
+    Vesta, __zkllvm_curve_vesta
+}
 
 /// Implements `fmt::Debug` and `fmt::Display`,
 /// assuming that `T.0` is `fmt::Debug` and `fmt::Display`.
-macro_rules! fmt_impls {
+macro_rules! fmt_impl {
     ($($t:ty)*) => ($(
         impl fmt::Debug for $t {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -110,7 +126,7 @@ macro_rules! fmt_impls {
     )*)
 }
 
-fmt_impls!(
+fmt_impl! {
     Bls12381
     Bls12381Base
     Bls12381Scalar
@@ -121,7 +137,7 @@ fmt_impls!(
     PallasBase
     PallasScalar
     Vesta
-);
+}
 
 macro_rules! from_impl {
     ($($t:ty, $builtin:ident)*) => ($(
@@ -141,7 +157,7 @@ macro_rules! from_impl {
     )*)
 }
 
-from_impl!(
+from_impl! {
     Bls12381, __zkllvm_curve_bls12381
     Bls12381Base, __zkllvm_field_bls12381_base
     Bls12381Scalar, __zkllvm_field_bls12381_scalar
@@ -152,9 +168,28 @@ from_impl!(
     PallasBase, __zkllvm_field_pallas_base
     PallasScalar, __zkllvm_field_pallas_scalar
     Vesta, __zkllvm_curve_vesta
-);
+}
 
-macro_rules! curve_inits {
+#[macro_use]
+mod arith_macros;
+
+arith_impl! {
+    Bls12381Base
+    Bls12381Scalar
+    Curve25519Base
+    Curve25519Scalar
+    PallasBase
+    PallasScalar
+}
+
+curve_arith_impl! {
+    Bls12381, Bls12381Scalar
+    Curve25519, Curve25519Scalar
+    Pallas, PallasScalar
+    Vesta, VestaScalar
+}
+
+macro_rules! curve_init_impl {
     ($($curve:ty, $builtin:ty, $base:ty)*) => ($(
         impl $curve {
             /// Create curve element from base field coordinates.
@@ -178,12 +213,12 @@ macro_rules! curve_inits {
     )*)
 }
 
-curve_inits!(
+curve_init_impl! {
     Bls12381, __zkllvm_curve_bls12381, Bls12381Base
     Curve25519, __zkllvm_curve_curve25519, Curve25519Base
     Pallas, __zkllvm_curve_pallas, PallasBase
     Vesta, __zkllvm_curve_vesta, VestaBase
-);
+}
 
 #[cfg(feature = "hash")]
 mod hash;
