@@ -3,7 +3,7 @@
 use std::iter::Once;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign};
 
-use ark_ff::{Field, Fp256, MontBackend, MontConfig};
+use ark_ff::{Field, Fp256, Fp384, MontBackend, MontConfig};
 use ark_ff::fields::{LegendreSymbol, SqrtPrecomputation};
 use ark_serialize::{
     CanonicalSerialize, CanonicalSerializeWithFlags, CanonicalDeserialize,
@@ -13,7 +13,7 @@ use ark_std::UniformRand;
 use ark_std::rand::Rng;
 use ark_std::io::{Write, Read};
 
-use super::{PallasBase, PallasScalar};
+use super::{Bls12381Base, Bls12381Scalar, Curve25519Base, Curve25519Scalar, PallasBase, PallasScalar};
 
 /// Implements `op<&mut Self>` for all arithmetic operations.
 ///
@@ -102,10 +102,14 @@ macro_rules! mut_arith_impl {
     )*)
 }
 
-mut_arith_impl!(
+mut_arith_impl! {
+    Bls12381Base
+    Bls12381Scalar
+    Curve25519Base
+    Curve25519Scalar
     PallasBase
     PallasScalar
-);
+}
 
 /// Implements [`UniformRand`].
 macro_rules! uniform_rand_impl {
@@ -122,10 +126,14 @@ macro_rules! uniform_rand_impl {
     )*)
 }
 
-uniform_rand_impl!(
+uniform_rand_impl! {
+    Bls12381Base
+    Bls12381Scalar
+    Curve25519Base
+    Curve25519Scalar
     PallasBase
     PallasScalar
-);
+}
 
 /// Implements a number of serialization traits.
 /// We actually do not need them, so they left blank.
@@ -186,10 +194,42 @@ macro_rules! serialize_impl {
     )*)
 }
 
-serialize_impl!(
+serialize_impl! {
+    Bls12381Base
+    Bls12381Scalar
+    Curve25519Base
+    Curve25519Scalar
     PallasBase
     PallasScalar
-);
+}
+
+#[derive(MontConfig)]
+#[modulus = "4002409555221667393417789825735904156556882819939007885332058136124031650490837864442687629129015664037894272559787"]
+#[generator = "2"]
+#[small_subgroup_base = "3"]
+#[small_subgroup_power = "2"]
+pub struct Bls12381BaseConfig;
+
+#[derive(MontConfig)]
+#[modulus = "52435875175126190479447740508185965837690552500527637822603658699938581184513"]
+#[generator = "7"]
+#[small_subgroup_base = "3"]
+#[small_subgroup_power = "1"]
+pub struct Bls12381ScalarConfig;
+
+#[derive(MontConfig)]
+#[modulus = "57896044618658097711785492504343953926634992332820282019728792003956564819949"]
+#[generator = "2"]
+#[small_subgroup_base = "3"]
+#[small_subgroup_power = "1"]
+pub struct Curve25519BaseConfig;
+
+#[derive(MontConfig)]
+#[modulus = "7237005577332262213973186563042994240857116359379907606001950938285454250989"]
+#[generator = "2"]
+#[small_subgroup_base = "3"]
+#[small_subgroup_power = "1"]
+pub struct Curve25519ScalarConfig;
 
 #[derive(MontConfig)]
 #[modulus = "28948022309329048855892746252171976963363056481941560715954676764349967630337"]
@@ -203,9 +243,9 @@ pub struct PallasScalarConfig;
 
 /// Implements [`Field`].
 macro_rules! ark_field_impl {
-    ($($t:ty, $tcfg:ty)*) => ($(
+    ($($t:ty, $bpf:ty)*) => ($(
         impl Field for $t {
-            type BasePrimeField = Fp256<MontBackend<$tcfg, 4>>;
+            type BasePrimeField = $bpf;
 
             type BasePrimeFieldIter = Once<Self::BasePrimeField>;
 
@@ -294,7 +334,11 @@ macro_rules! ark_field_impl {
     )*)
 }
 
-ark_field_impl!(
-    PallasBase, PallasBaseConfig
-    PallasScalar, PallasScalarConfig
-);
+ark_field_impl! {
+    Bls12381Base, Fp384<MontBackend<Bls12381BaseConfig, 6>>
+    Bls12381Scalar, Fp256<MontBackend<Bls12381ScalarConfig, 4>>
+    Curve25519Base, Fp256<MontBackend<Curve25519BaseConfig, 4>>
+    Curve25519Scalar, Fp256<MontBackend<Curve25519ScalarConfig, 4>>
+    PallasBase, Fp256<MontBackend<PallasBaseConfig, 4>>
+    PallasScalar, Fp256<MontBackend<PallasScalarConfig, 4>>
+}

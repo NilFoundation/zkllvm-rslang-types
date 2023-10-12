@@ -238,4 +238,7 @@ mod zeroize;
 #[cfg(feature = "arkworks")]
 mod arkworks;
 #[cfg(feature = "arkworks")]
-pub use arkworks::{PallasBaseConfig, PallasScalarConfig};
+pub use arkworks::{
+    Bls12381BaseConfig, Bls12381ScalarConfig, Curve25519BaseConfig, Curve25519ScalarConfig,
+    PallasBaseConfig, PallasScalarConfig,
+};
